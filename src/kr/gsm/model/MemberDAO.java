@@ -102,13 +102,37 @@ public class MemberDAO {
         return list;
     }
 
+    public MemberVO getById(String _id) {
+        conn = createConnection();
+        String SQL = "SELECT * FROM TBLMEM WHERE ID = ?";
+        MemberVO member = null;
+
+        try {
+            ps = conn.prepareStatement(SQL);
+            ps.setString(1, _id);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String id = rs.getString("id");
+                String pwd = rs.getString("pwd");
+                int age = rs.getInt("age");
+                member = new MemberVO(id, pwd, age);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return member;
+    }
+
     public void closeConnection() {
         try {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
             if (conn != null) conn.close();
-        } catch (SQLException e) {
-            return;
+        } catch (SQLException ignored) {
+
         }
     }
 }

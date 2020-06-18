@@ -16,13 +16,10 @@
             <td>PWD</td>
             <td>AGE</td>
         </tr>
-        <% for (MemberVO vo : list) {
-            if (vo.getId().equals("최호승")) {%>
-            <tr style="background-color: aquamarine">
-            <% } else { %>
-            <tr>
-            <% } %>
-                <td><%=vo.getId()%></td>
+        <% for (MemberVO vo : list) {%>
+
+            <tr <% if (vo.getId().equals("최호승")) { %> style="background-color: aquamarine" <% } %>>
+                <td><a href="memcontent.do?id=<%=vo.getId()%>"><%=vo.getId()%></a></td>
                 <td><%=vo.getPwd()%></td>
                 <td><%=vo.getAge()%></td>
                 <td><a href="memdelete.do?id=<%=vo.getId()%>">삭제</a></td>
