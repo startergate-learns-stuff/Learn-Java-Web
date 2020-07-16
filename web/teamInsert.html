@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-size: 12px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        const jsonHtml = data => {  // data.y(위도), data,x(경도)
+            $("#latitude").val(data.y);
+            $("#longitude").val(data.x);
+        }
+
+
+        $(document).ready(_ => {
+            $('#addBtn').click(_ => {
+                const formData = $('#form').serialize();
+                $.ajax({
+                    url: 'teamInsert.do',
+                    type: 'post',
+                    data: formData,
+                    success: _ => self.close(),
+                    error: _ => alert('error')
+                })
+            });
+
+            $('#search').click(_ => {
+                const address = $('#companyName').val();
+                $.ajax('mapSearch.do', {
+                    type: 'post',
+                    data: {
+                        'address': address
+                    },
+                    dataType: 'json',
+                    success: jsonHtml,
+                    error: () => alert('error')
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    팀원 가입 화면
+    <form action="" id="form">
+        <table>
+            <tr>
+                <td>이름</td>
+                <td><input type="text" name="name" id="name" /></td>
+            </tr>
+            <tr>
+                <td>전화번호</td>
+                <td><input type="text" name="phone" id="phone" /></td>
+            </tr>
+            <tr>
+                <td>주소</td>
+                <td>
+                    <input type="text" name="companyName" id="companyName" />
+                    <input type="button" value="위도경도검색" id="search" />
+                </td>
+            </tr>
+            <tr>
+                <td>위도</td>
+                <td><input type="text" name="longitude" id="longitude" /></td>
+            </tr>
+            <tr>
+                <td>경도</td>
+                <td><input type="text" name="latitude" id="latitude" /></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" value="가입">
+                    <input type="button" value="닫기" onclick="self.close()">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

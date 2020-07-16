@@ -4,10 +4,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,5 +96,23 @@ public class LBSMAP {
         JSONObject tempObj = (JSONObject) jsonArray.get(0);
 
         return tempObj.toString();
+    }
+
+    public int teamInsert(MapVO vo) {
+        conn = getConnect();
+        String SQL = "INSERT INTO BIZCARD VALUES (?, ?, ?, ?, ?)";
+        int cnt = 0;
+        try {
+            ps = conn.prepareStatement(SQL);
+            ps.setString(1, vo.getName());
+            ps.setString(2, vo.getPhone());
+            ps.setString(3, vo.getCompanyName());
+            ps.setDouble(4, vo.getLatitude());
+            ps.setDouble(5, vo.getLongitude());
+            cnt = ps.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return cnt;
     }
 }
