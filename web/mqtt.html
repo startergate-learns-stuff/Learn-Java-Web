@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>MQTT Web Client</title>
+    <style type="text/css">
+        body {
+            font-family: "Open Sans", sans-serif;
+        }
+    </style>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0e46bbbf75a5ba4b01762725b70d591e"></script>
+</head>
+<body>
+
+<H1>MQTT Web Subscribe Client</H1><br><br>
+
+<h3>please enter Server host and port.</h3><br>
+<label for="text_host">host</label> : <input type="text" id="text_host" /><br>
+<label for="text_port">port</label> : <input type="text" id="text_port" /><br>
+<label for="text_topic">topic</label> : <input type="text" id="text_topic" /><br><br>
+
+<input type="button" id="mqtt_con_but" value="Connect" onclick="beginMQTTweb()">
+<br><br>
+
+connection status : <div id="con_status" style="display:inline">disconnect</div><br>
+Message : <div id="msg" style="display:inline"></div><br>
+
+<div id="map" style="width:100%;height:350px;"></div>
+
+
+<script type="text/javascript" src="js/mqttws31.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+    function beginMQTTweb() {
+        if (document.getElementById("mqtt_con_but").value == "Connect") {
+            host = document.getElementById("text_host").value;
+            port = document.getElementById("text_port").value;
+            topic = document.getElementById("text_topic").value;
+            if ((host == "") || (port == "")) {
+                alert("Please enter host and port.");
+            } else {
+                mqclient = new Paho.MQTT.Client(host, Number(port), "clientId_pcm");
+                // set callback handlers
+                mqclient.onConnectionLost = onConnectionLost;
+                mqclient.onMessageArrived = onMessageArrived;
+                // connect the client
+                mqclient.connect({
+                    onSuccess : onConnect,
+                    onFailure : onFailure
+                });
+            }
+        } else if (document.getElementById("mqtt_con_but").value == "Disconnect") {
+
+            mqclient.disconnect();
+            document.getElementById("con_status").textContent = "disconnect";
+            document.getElementById("mqtt_con_but").value = "Connect";
+            console.log("Disconnect");
+        }
+    }
+    function onFailure() {
+        alert("Please enter host and port again.")
+    }
+    // called when the client connects
+    function onConnect() {
+        // Once a connection has been made, make a subscription and send a message.
+        console.log("onConnect");
+        document.getElementById("con_status").textContent = "connect";
+        mqclient.subscribe(topic);
+        document.getElementById("mqtt_con_but").value = "Disconnect";
+    }
+    // called when the client loses its connection
+    function onConnectionLost(responseObject) {
+        if (responseObject.errorCode !== 0) {
+            console.log("onConnectionLost:" + responseObject.errorMessage);
+            document.getElementById("con_status").textContent = "disconnect";
+            document.getElementById("mqtt_con_but").value = "Connect";
+        }
+    }
+    // called when a message arrives
+    function onMessageArrived(message) {
+        const msg = JSON.parse(message.payloadString);
+        console.log("onMessageArrived:" + msg.tmp);
+        //document.getElementById("msg").textContent = message.payloadString;
+        document.getElementById("msg").innerHTML =msg.tmp;
+        setMap(msg.lat, msg.lng)
+    }
+    function setMap(lat=33.450701, lng=126.570667) {
+        const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+        const position = new kakao.maps.LatLng(lat, lng)
+        const options = { //지도를 생성할 때 필요한 기본 옵션
+            center: position, //지도의 중심좌표.
+            level: 5 //지도의 레벨(확대, 축소 정도)
+        };
+
+        const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+        const marker = new kakao.maps.Marker({
+            position: position
+        });
+
+        marker.setMap(map);
+    }
+    setMap();
+</script>
+</body>
+</html>
