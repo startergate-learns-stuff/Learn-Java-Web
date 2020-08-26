@@ -1,4 +1,4 @@
-package kr.gsm;
+package kr.gsm2;
 
 public class MyUtil {
     public int hap() {
