@@ -4,13 +4,7 @@ public class MemberVO {
     private int num, bun;
     private String name, tel, email, addr;
 
-    public MemberVO(int bun, String name, String tel, String email, String addr) {
-        this.bun = bun;
-        this.name = name;
-        this.tel = tel;
-        this.email = email;
-        this.addr = addr;
-    }
+    public MemberVO() {}
 
     public MemberVO(int num, int bun, String name, String tel, String email, String addr) {
         this.num = num;

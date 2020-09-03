@@ -18,17 +18,33 @@
             <td>전화번호</td>
             <td>이메일</td>
             <td>주소</td>
+            <td>삭제</td>
         </tr>
         <% for (MemberVO vo : list) { %>
         <tr>
             <td><%=vo.getNum()%></td>
-            <td><%=vo.getBun()%></td>
+            <td><a href="./content?num=<%=vo.getNum()%>"><%=vo.getBun()%></a></td>
             <td><%=vo.getName()%></td>
             <td><%=vo.getTel()%></td>
             <td><%=vo.getEmail()%></td>
             <td><%=vo.getAddr()%></td>
+            <td><input type="button" value="삭제" onclick="memdel(<%=vo.getNum()%>)"></td>
         </tr>
         <% } %>
+        <tr>
+            <td colspan="7" style="text-align: right">
+                <input type="button" value="회원가입" onclick="memform()">
+            </td>
+        </tr>
     </table>
+    <script>
+        function memform() {
+            location.href = './member2.html'
+        }
+
+        function memdel(num) {
+            location.href = './delete/?id=' + num
+        }
+    </script>
 </body>
 </html>
