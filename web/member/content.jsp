@@ -39,7 +39,7 @@
             <tr>
                 <td colspan="2" style="text-align: center">
                     <input type="submit" value="수정">
-                    <input type="button" value="리스트">
+                    <input type="button" value="리스트" onclick="location.href = '/list'">
                 </td>
             </tr>
         </table>
