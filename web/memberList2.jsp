@@ -1,9 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="kr.gsm2.model.*" %>
 <%@ page import="java.util.ArrayList" %>
-<%
-    ArrayList<MemberVO> list = (ArrayList<MemberVO>) request.getAttribute("list");
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Title</title>
@@ -20,17 +18,17 @@
             <td>주소</td>
             <td>삭제</td>
         </tr>
-        <% for (MemberVO vo : list) { %>
-        <tr>
-            <td><%=vo.getNum()%></td>
-            <td><a href="./content?num=<%=vo.getNum()%>"><%=vo.getBun()%></a></td>
-            <td><%=vo.getName()%></td>
-            <td><%=vo.getTel()%></td>
-            <td><%=vo.getEmail()%></td>
-            <td><%=vo.getAddr()%></td>
-            <td><input type="button" value="삭제" onclick="memdel(<%=vo.getNum()%>)"></td>
-        </tr>
-        <% } %>
+        <c:forEach var="vo" items="${list}">
+            <tr>
+                <td>${vo.getNum()}</td>
+                <td><a href="./content?num=${vo.getNum()}">${vo.getBun()}</a></td>
+                <td>${vo.getName()}</td>
+                <td>${vo.getTel()}</td>
+                <td>${vo.getEmail()}</td>
+                <td>${vo.getAddr()}</td>
+                <td><input type="button" value="삭제" onclick="memdel(${vo.getNum()})"></td>
+            </tr>
+        </c:forEach>
         <tr>
             <td colspan="7" style="text-align: right">
                 <input type="button" value="회원가입" onclick="memform()">
