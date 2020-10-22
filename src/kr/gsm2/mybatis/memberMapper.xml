@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mybatis.example.BlogMapper">
+    <select id="memberList" resultType="kr.gsm2.model.MemberVO">
+        SELECT * FROM TBLMEM2 ORDER BY NUM DESC
+    </select>
+
+    <insert id="memberInsert" parameterType="kr.gsm2.model.MemberVO">
+        INSERT INTO TBLMEM2 VALUES  (SEQ_NUM.nextval, #{bun}, #{name}, #{tel}, #{email}, #{addr})
+    </insert>
+
+    <delete id="memberDelete" parameterType="Integer">
+        DELETE FROM TBLMEM2 WHERE NUM = #{num}
+    </delete>
+
+    <select id="memberContent" parameterType="Integer" resultType="kr.gsm2.model.MemberVO">
+        SELECT * FROM TBLMEM2 WHERE NUM = #{num}
+    </select>
+
+    <update id="memberUpdate" parameterType="kr.gsm2.model.MemberVO">
+        UPDATE TBLMEM2 SET TEL=#{tel}, EMAIL=#{email}, ADDR=#{addr} WHERE NUM=#{num}
+    </update>
+</mapper>
